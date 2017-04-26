@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('') {
       steps {
-        archiveArtifacts(fingerprint: true, artifacts: 'cookbook')
+        sh 'kitchen converge'
       }
     }
   }
