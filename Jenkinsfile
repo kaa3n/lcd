@@ -1,10 +1,23 @@
 pipeline {
   agent any
   stages {
-    stage('') {
+    stage('error') {
       steps {
-        sh 'kitchen converge'
+        parallel(
+          "integration test": {
+            sh 'chef exec rspec --color -fd'
+            
+          },
+          "unit test": {
+            sh '''kitchen converge
+kitchen verify'''
+            
+          }
+        )
       }
     }
+  }
+  environment {
+    test = ''
   }
 }
