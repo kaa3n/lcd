@@ -6,7 +6,7 @@
 
 require 'spec_helper'
 
-describe 'lcd_web::default' do
+describe 'lcd_web::users' do
   context 'When all attributes are default, on an unspecified platform' do
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new(platform: 'centos', version: '7.2.1511')
@@ -16,21 +16,14 @@ describe 'lcd_web::default' do
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
     end
-  
-    it 'install httpd' do
-	     expect(chef_run).to install_package('httpd')
+
+    it 'creates the group' do
+      expect { chef_run }.to create_group('developers')
     end
 
-    it 'enables the httpd service do' do
-	     expect(chef_run).to enable_service('httpd')
-    end
-
-    it 'starts the httpd service' do
-	     expect(chef_run).to start_service('httpd')
-    end
-   
-    it 'install net-tools' do
-	     expect(chef_run).to install_package('net-tools')
+    it 'creates the user' do
+      expect { chef_run }.to create_user('webadmin').with(group: 'developers')
+      its
     end
   end
 end
